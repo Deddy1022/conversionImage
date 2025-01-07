@@ -118,7 +118,8 @@ async function startProcessing() {
   showProgressModal();
   updateProgress(0);
 
-  const totalFiles = imageFilePassed.length;
+  const totalFiles = imageFilePassed.length,
+  corrompus = {};
 
   try {
     await processWithConcurrencyLimit(
@@ -129,13 +130,19 @@ async function startProcessing() {
         const name = file.name.split(".")[0];
         const dossier = file.webkitRelativePath.split("/").find(folder => /\b^[0-9]{2}\_[0-9]{1,}\b$/.test(folder)) || "Unknown";
 
-        await window.sessions.compress(fileBuffer, imageInput, name, dossier);
+        const { corrompusParDossier } = await window.sessions.compress(fileBuffer, name, dossier);
 
+        for (const [dos, total] of Object.entries(corrompusParDossier)) {
+          if (!corrompus[dos]) {
+            corrompus[dos] = 0;
+          }
+          corrompus[dos] += total;
+        }
         const progress = Math.round(((index + 1) / totalFiles) * 100);
         updateProgress(progress);
       }
     );
-
+    window.sessions.log(corrompus);
     updateProgress(100);
     setTimeout(() => {
       hideProgressModal();
@@ -151,11 +158,3 @@ async function startProcessing() {
 document.querySelector("input[type='button']").addEventListener("click", async() => {
   await startProcessing();
 });
-
-async function func(fileBuffer, input, name, dossier) {
-  try {
-    await window.sessions.compress(fileBuffer, input, name, dossier);
-  } catch (err) {
-    console.error("Compression failed:", err);
-  }
-}
