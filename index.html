@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+  <link rel="stylesheet" href="./index.css">
+  <title>Studia Inc</title>
+</head>
+<body>
+  <div class="container">
+    <h2>Traiter un document</h2>
+    <div class="upload-box">
+      <div class="upload-area" id="uploadArea1">
+        <div class="upload-icon">
+          <img src="./public/fontawesome-free-6.7.2-desktop/svgs/solid/folder.svg" alt="Upload Icon" width="50">
+        </div>
+        <p class="upload-text-image">Glissez et déposez vos images ici <br/>Formats acceptés : JPG, PNG</p>
+        <label for="image" class="upload-button">Sélectionner des images</label>
+        <input type="file" name="image" id="image" accept="image/*" webkitdirectory hidden>
+        <div id="imagePreview" class="file-preview"></div>
+      </div>
+    </div>
+    <input type="button" id="processButton" class="process-button" value="Traiter" />
+  </div>
+  <p id="info" class="text-4xl text-red-600"></p>
+  <div id="progressModal" class="modal">
+    <div class="modal-content">
+      <h2>Traitement en cours...</h2>
+      <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <p id="progressText">0%</p>
+    </div>
+  </div>
+  <script src="./src/renderer.js"></script>
+</body>
+</html>
